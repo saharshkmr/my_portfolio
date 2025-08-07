@@ -1,44 +1,45 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
+import { Routes, Route } from 'react-router-dom';
+
+// Components
+import Layout from './components/Layout';
+import ScrollToTop from './components/Common/ScrollToTop';
+import Home from './pages/Home';
+import ProjectDetails from './pages/ProjectDetails';
+import NotFound from './pages/NotFound';
+
+// Global styles
 import './App.css';
+import './styles/global.css';
+
+// Fonts
+import '@fontsource/inter/300.css';
+import '@fontsource/inter/400.css';
+import '@fontsource/inter/500.css';
+import '@fontsource/inter/700.css';
 
 function App() {
-  const [message, setMessage] = useState('');
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
-
-  useEffect(() => {
-    // Fetch data from the server
-    const fetchData = async () => {
-      try {
-        const response = await fetch('/api');
-        if (!response.ok) {
-          throw new Error('Network response was not ok');
-        }
-        const data = await response.json();
-        setMessage(data.message);
-      } catch (err) {
-        setError(err.message);
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchData();
-  }, []);
-
   return (
-    <div className="App">
-      <header className="App-header">
-        <h1>React Client-Server App</h1>
-        {loading ? (
-          <p>Loading...</p>
-        ) : error ? (
-          <p style={{ color: 'red' }}>Error: {error}</p>
-        ) : (
-          <p>{message}</p>
-        )}
-      </header>
-    </div>
+    <>
+      <ScrollToTop />
+      <Routes>
+        <Route path="/" element={
+          <Layout>
+            <Home />
+          </Layout>
+        } />
+        <Route path="/projects/:id" element={
+          <Layout>
+            <ProjectDetails />
+          </Layout>
+        } />
+        <Route path="*" element={
+          <Layout>
+            <NotFound />
+          </Layout>
+        } />
+      </Routes>
+    </>
   );
 }
 
